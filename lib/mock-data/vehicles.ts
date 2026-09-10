@@ -1,0 +1,28 @@
+import type { Vehicle } from '@/lib/types'
+
+export const vehicles: Vehicle[] = [
+  { id: 'VH-2001', registration: 'CA-482-KL', brand: 'Toyota', model: 'Corolla', year: 2019, fuel: 'Gasoline', transmission: 'Automatic', mileage: 68420, clientId: 'CL-1001', clientName: 'James Carter', lastService: '2024-11-12', nextService: '2025-05-12', status: 'Active' },
+  { id: 'VH-2002', registration: 'CA-119-RT', brand: 'BMW', model: '320i', year: 2021, fuel: 'Gasoline', transmission: 'Automatic', mileage: 41230, clientId: 'CL-1001', clientName: 'James Carter', lastService: '2025-01-08', nextService: '2025-07-08', status: 'In Service' },
+  { id: 'VH-2003', registration: 'CA-773-BN', brand: 'Mercedes-Benz', model: 'C200', year: 2020, fuel: 'Diesel', transmission: 'Automatic', mileage: 55600, clientId: 'CL-1002', clientName: 'Sophia Nguyen', lastService: '2024-09-22', nextService: '2025-03-22', status: 'Active' },
+  { id: 'VH-2004', registration: 'CA-208-QW', brand: 'Peugeot', model: '308', year: 2018, fuel: 'Diesel', transmission: 'Manual', mileage: 91250, clientId: 'CL-1003', clientName: 'Liam Okafor', lastService: '2024-12-01', nextService: '2025-06-01', status: 'Active' },
+  { id: 'VH-2005', registration: 'CA-566-ZX', brand: 'Renault', model: 'Clio', year: 2017, fuel: 'Gasoline', transmission: 'Manual', mileage: 102400, clientId: 'CL-1003', clientName: 'Liam Okafor', lastService: '2025-01-15', nextService: '2025-07-15', status: 'In Service' },
+  { id: 'VH-2006', registration: 'CA-901-DF', brand: 'Ford', model: 'Focus', year: 2019, fuel: 'Gasoline', transmission: 'Automatic', mileage: 73900, clientId: 'CL-1003', clientName: 'Liam Okafor', lastService: '2024-08-30', nextService: '2025-02-28', status: 'Active' },
+  { id: 'VH-2007', registration: 'CA-344-GH', brand: 'Volkswagen', model: 'Golf', year: 2022, fuel: 'Hybrid', transmission: 'Automatic', mileage: 22150, clientId: 'CL-1004', clientName: 'Emma Rossi', lastService: '2025-02-03', nextService: '2025-08-03', status: 'Active' },
+  { id: 'VH-2008', registration: 'CA-655-JK', brand: 'Hyundai', model: 'Tucson', year: 2021, fuel: 'Diesel', transmission: 'Automatic', mileage: 38700, clientId: 'CL-1005', clientName: 'Noah Meyer', lastService: '2024-10-19', nextService: '2025-04-19', status: 'Active' },
+  { id: 'VH-2009', registration: 'CA-712-LM', brand: 'Toyota', model: 'RAV4', year: 2020, fuel: 'Hybrid', transmission: 'Automatic', mileage: 49800, clientId: 'CL-1005', clientName: 'Noah Meyer', lastService: '2024-12-22', nextService: '2025-06-22', status: 'In Service' },
+  { id: 'VH-2010', registration: 'CA-238-NP', brand: 'BMW', model: 'X3', year: 2023, fuel: 'Gasoline', transmission: 'Automatic', mileage: 15420, clientId: 'CL-1006', clientName: 'Olivia Santos', lastService: '2025-01-30', nextService: '2025-07-30', status: 'Active' },
+  { id: 'VH-2011', registration: 'CA-489-RS', brand: 'Mercedes-Benz', model: 'GLA', year: 2022, fuel: 'Gasoline', transmission: 'Automatic', mileage: 27650, clientId: 'CL-1007', clientName: 'William Dubois', lastService: '2024-11-28', nextService: '2025-05-28', status: 'Active' },
+  { id: 'VH-2012', registration: 'CA-876-TV', brand: 'Peugeot', model: '3008', year: 2020, fuel: 'Diesel', transmission: 'Automatic', mileage: 61300, clientId: 'CL-1007', clientName: 'William Dubois', lastService: '2024-09-14', nextService: '2025-03-14', status: 'Active' },
+  { id: 'VH-2013', registration: 'CA-153-WX', brand: 'Renault', model: 'Megane', year: 2019, fuel: 'Diesel', transmission: 'Manual', mileage: 84500, clientId: 'CL-1008', clientName: 'Ava Kowalski', lastService: '2025-02-10', nextService: '2025-08-10', status: 'Active' },
+  { id: 'VH-2014', registration: 'CA-627-YZ', brand: 'Ford', model: 'Kuga', year: 2021, fuel: 'Hybrid', transmission: 'Automatic', mileage: 33900, clientId: 'CL-1009', clientName: 'Benjamin Silva', lastService: '2024-12-05', nextService: '2025-06-05', status: 'In Service' },
+  { id: 'VH-2015', registration: 'CA-390-AB', brand: 'Volkswagen', model: 'Passat', year: 2018, fuel: 'Diesel', transmission: 'Automatic', mileage: 97200, clientId: 'CL-1009', clientName: 'Benjamin Silva', lastService: '2024-08-11', nextService: '2025-02-11', status: 'Active' },
+  { id: 'VH-2016', registration: 'CA-741-CD', brand: 'Hyundai', model: 'i30', year: 2020, fuel: 'Gasoline', transmission: 'Manual', mileage: 58600, clientId: 'CL-1010', clientName: 'Mia Ahmed', lastService: '2025-01-20', nextService: '2025-07-20', status: 'Active' },
+  { id: 'VH-2017', registration: 'CA-508-EF', brand: 'Tesla', model: 'Model 3', year: 2023, fuel: 'Electric', transmission: 'Automatic', mileage: 18900, clientId: 'CL-1011', clientName: 'Lucas Fischer', lastService: '2025-02-14', nextService: '2025-08-14', status: 'Active' },
+  { id: 'VH-2018', registration: 'CA-962-GH', brand: 'Toyota', model: 'Hilux', year: 2019, fuel: 'Diesel', transmission: 'Manual', mileage: 112300, clientId: 'CL-1011', clientName: 'Lucas Fischer', lastService: '2024-10-02', nextService: '2025-04-02', status: 'Active' },
+  { id: 'VH-2019', registration: 'CA-284-IJ', brand: 'BMW', model: '520d', year: 2021, fuel: 'Diesel', transmission: 'Automatic', mileage: 44100, clientId: 'CL-1013', clientName: 'Henry Petrov', lastService: '2024-11-19', nextService: '2025-05-19', status: 'In Service' },
+  { id: 'VH-2020', registration: 'CA-617-KL', brand: 'Mercedes-Benz', model: 'A180', year: 2022, fuel: 'Gasoline', transmission: 'Automatic', mileage: 29800, clientId: 'CL-1014', clientName: 'Charlotte Bianchi', lastService: '2025-01-05', nextService: '2025-07-05', status: 'Active' },
+]
+
+export function getVehicleById(id: string) {
+  return vehicles.find((vehicle) => vehicle.id === id)
+}
