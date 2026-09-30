@@ -6,12 +6,39 @@ import { Wrench, X, LogOut } from 'lucide-react'
 import { navItems } from '@/lib/navigation'
 import { cn } from '@/lib/utils'
 import { Avatar } from '@/components/kit/avatar'
+import { logout } from '@/lib/auth'
+import { useAuth } from '@/contexts/AuthContext'
+import { UserRole } from '@/lib/types'
 
-export function Sidebar({ mobileOpen, onClose }: { mobileOpen: boolean; onClose: () => void }) {
+
+
+export function Sidebar({ mobileOpen, onClose, role }: { role: UserRole; mobileOpen: boolean; onClose: () => void }) {
   const pathname = usePathname()
+  const { user } = useAuth()
+
+  
+  const menus = navItems.filter((item) => 
+    item.role.includes(role)    
+  )
+
+  
+  
 
   const isActive = (href: string) =>
     href === '/' ? pathname === '/' : pathname.startsWith(href)
+
+  const handleLogout = async () => {
+    console.log("Logout");
+
+    try {
+      await logout();
+    } catch (error) {
+      console.log(error);
+    }
+
+  }
+
+
 
   return (
     <>
@@ -49,7 +76,7 @@ export function Sidebar({ mobileOpen, onClose }: { mobileOpen: boolean; onClose:
 
         <nav className="flex-1 overflow-y-auto px-3 py-4">
           <ul className="flex flex-col gap-0.5">
-            {navItems.map((item) => {
+            {menus.map((item) => {
               const active = isActive(item.href)
               return (
                 <li key={item.href}>
@@ -76,14 +103,14 @@ export function Sidebar({ mobileOpen, onClose }: { mobileOpen: boolean; onClose:
           <div className="flex items-center gap-3 rounded-lg px-2 py-2">
             <Avatar name="Elena Vasquez" size="sm" className="bg-sidebar-accent text-white" />
             <div className="flex min-w-0 flex-1 flex-col leading-tight">
-              <span className="truncate text-sm font-medium text-white">Elena Vasquez</span>
-              <span className="truncate text-xs text-sidebar-foreground/70">Administrator</span>
+              <span className="truncate text-sm font-medium text-white"> {user?.name} </span>
+              <span className="truncate text-xs text-sidebar-foreground/70"> {user?.email} </span>
             </div>
             <button
               className="rounded-md p-1.5 text-sidebar-foreground/70 hover:bg-sidebar-accent hover:text-white"
               aria-label="Sign out"
             >
-              <LogOut className="size-4" />
+              <LogOut onClick={handleLogout} className="size-4" />
             </button>
           </div>
         </div>

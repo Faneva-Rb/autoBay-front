@@ -29,10 +29,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning className="bg-background">
-      <body className={`${geistSans.variable} ${geistMono.variable} font-sans antialiased`}>
-        <ThemeProvider>{children}</ThemeProvider>
-        {process.env.NODE_ENV === 'production' && <Analytics />}
-      </body>
+        <body className={`${geistSans.variable} ${geistMono.variable} font-sans antialiased`}>
+          <ThemeProvider>{children}</ThemeProvider>
+          {process.env.NODE_ENV === 'production' && <Analytics />}
+        </body>
+
     </html>
   )
 }

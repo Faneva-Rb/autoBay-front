@@ -164,10 +164,10 @@ export interface Payment {
   status: PaymentStatus
 }
 
-export type UserRole = 'Administrator' | 'Workshop Manager' | 'Receptionist' | 'Mechanic'
+export type UserRole = 'ADMIN' | 'WORKSHOP_MANAGER' | 'RECEPTIONIST' | 'MECHANIC'
 export type UserStatus = 'Active' | 'Inactive'
 
-export interface AppUser {
+export interface User {
   id: string
   name: string
   email: string

@@ -1,6 +1,6 @@
-import type { AppUser } from '@/lib/types'
+import type { User } from '@/lib/types'
 
-export const users: AppUser[] = [
+export const users: User[] = [
   { id: 'US-01', name: 'Elena Vasquez', email: 'elena.vasquez@autobay.com', phone: '+1 202 555 0401', role: 'Administrator', status: 'Active', lastLogin: '2025-02-24T08:12:00' },
   { id: 'US-02', name: 'Robert Klein', email: 'robert.klein@autobay.com', phone: '+1 202 555 0402', role: 'Workshop Manager', status: 'Active', lastLogin: '2025-02-24T07:45:00' },
   { id: 'US-03', name: 'Grace Miller', email: 'grace.miller@autobay.com', phone: '+1 202 555 0403', role: 'Receptionist', status: 'Active', lastLogin: '2025-02-24T08:30:00' },
