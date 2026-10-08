@@ -1,6 +1,6 @@
 'use client'
 
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import {
   Plus,
   Users,
@@ -14,8 +14,7 @@ import {
   Wrench,
   MoreVertical,
 } from 'lucide-react'
-import type { Client, ClientStatus } from '@/lib/types'
-import { clients as seedClients } from '@/lib/mock-data/clients'
+import type { Customer, ClientStatus } from '@/lib/types'
 import { PageHeader } from '@/components/layout/page-header'
 import { Toolbar, SearchInput } from '@/components/kit/toolbar'
 import { Select } from '@/components/kit/select'
@@ -29,37 +28,55 @@ import { Field, Input } from '@/components/kit/input'
 import { EmptyState } from '@/components/kit/empty-state'
 import { StatCard } from '@/components/dashboard/stat-card'
 import { formatCurrency, formatDate } from '@/lib/format'
+import { customersService } from '@/services/customers.service'
 
 const emptyForm = {
   firstName: '',
-  lastName: '',
-  phone: '',
+  name: '',
+  phoneNumber: '',
   email: '',
   address: '',
   status: 'Active' as ClientStatus,
 }
 
 export function ClientsView() {
-  const [clients, setClients] = useState<Client[]>(seedClients)
+  const [customers, setCustomers] = useState<Customer[]>([])
   const [search, setSearch] = useState('')
   const [status, setStatus] = useState('all')
   const [formOpen, setFormOpen] = useState(false)
-  const [editing, setEditing] = useState<Client | null>(null)
-  const [viewing, setViewing] = useState<Client | null>(null)
-  const [deleting, setDeleting] = useState<Client | null>(null)
+  const [editing, setEditing] = useState<Customer | null>(null)
+  const [viewing, setViewing] = useState<Customer | null>(null)
+  const [deleting, setDeleting] = useState<Customer | null>(null)
   const [form, setForm] = useState(emptyForm)
 
+
+  const fetchCustomers = async () => {
+    try {
+      const data = await customersService.getAll();
+      setCustomers(data.data);
+      console.log(data);
+      
+    } catch (err) {
+      console.log(err);
+      
+    } 
+  };
+
+  useEffect(() => {
+    fetchCustomers();
+  }, []);
+
   const filtered = useMemo(() => {
-    return clients.filter((c) => {
+    return customers.filter((c) => {
       const q = search.toLowerCase()
       const matchesSearch =
-        `${c.firstName} ${c.lastName}`.toLowerCase().includes(q) ||
+        `${c.firstName} ${c.name}`.toLowerCase().includes(q) ||
         c.email.toLowerCase().includes(q) ||
-        c.phone.includes(q)
+        c.phoneNumber.includes(q)
       const matchesStatus = status === 'all' || c.status === status
       return matchesSearch && matchesStatus
     })
-  }, [clients, search, status])
+  }, [customers, search, status])
 
   const openAdd = () => {
     setEditing(null)
@@ -67,12 +84,12 @@ export function ClientsView() {
     setFormOpen(true)
   }
 
-  const openEdit = (client: Client) => {
+  const openEdit = (client: Customer) => {
     setEditing(client)
     setForm({
       firstName: client.firstName,
-      lastName: client.lastName,
-      phone: client.phone,
+      name: client.name,
+      phoneNumber: client.phoneNumber,
       email: client.email,
       address: client.address,
       status: client.status,
@@ -83,12 +100,12 @@ export function ClientsView() {
   const submit = (e: React.FormEvent) => {
     e.preventDefault()
     if (editing) {
-      setClients((prev) =>
+      setCustomers((prev) =>
         prev.map((c) => (c.id === editing.id ? { ...c, ...form } : c)),
       )
     } else {
-      const id = `CL-${1000 + clients.length + 1}`
-      setClients((prev) => [
+      const id = `CL-${1000 + customers.length + 1}`
+      setCustomers((prev) => [
         {
           id,
           ...form,
@@ -103,17 +120,17 @@ export function ClientsView() {
     setFormOpen(false)
   }
 
-  const columns: Column<Client>[] = [
+  const columns: Column<Customer>[] = [
     {
       key: 'name',
-      header: 'Client',
-      sortValue: (c) => `${c.firstName} ${c.lastName}`,
+      header: 'Customer',
+      sortValue: (c) => `${c.firstName} ${c.name}`,
       render: (c) => (
         <div className="flex items-center gap-3">
-          <Avatar name={`${c.firstName} ${c.lastName}`} size="sm" />
+          <Avatar name={`${c.firstName} ${c.name}`} size="sm" />
           <div className="min-w-0">
             <p className="truncate font-medium">
-              {c.firstName} {c.lastName}
+              {c.firstName} {c.name}
             </p>
             <p className="truncate text-xs text-muted-foreground">{c.id}</p>
           </div>
@@ -127,7 +144,7 @@ export function ClientsView() {
         <div className="flex flex-col gap-0.5 text-xs">
           <span className="flex items-center gap-1.5 text-foreground">
             <Phone className="size-3 text-muted-foreground" />
-            {c.phone}
+            {c.phoneNumber}
           </span>
           <span className="flex items-center gap-1.5 text-muted-foreground">
             <Mail className="size-3" />
@@ -143,20 +160,7 @@ export function ClientsView() {
       sortValue: (c) => c.vehicleCount,
       render: (c) => <span className="tabular-nums">{c.vehicleCount}</span>,
     },
-    {
-      key: 'repairs',
-      header: 'Repairs',
-      align: 'center',
-      sortValue: (c) => c.totalRepairs,
-      render: (c) => <span className="tabular-nums">{c.totalRepairs}</span>,
-    },
-    {
-      key: 'spent',
-      header: 'Total Spent',
-      align: 'right',
-      sortValue: (c) => c.totalSpent,
-      render: (c) => <span className="font-medium tabular-nums">{formatCurrency(c.totalSpent)}</span>,
-    },
+
     {
       key: 'status',
       header: 'Status',
@@ -188,8 +192,8 @@ export function ClientsView() {
     },
   ]
 
-  const activeCount = clients.filter((c) => c.status === 'Active').length
-  const totalRevenue = clients.reduce((s, c) => s + c.totalSpent, 0)
+  const activeCount = customers.filter((c) => c.status === 'Active').length
+  const totalRevenue = customers.reduce((s, c) => s + c.totalSpent, 0)
 
   return (
     <div>
@@ -199,19 +203,19 @@ export function ClientsView() {
         actions={
           <Button onClick={openAdd}>
             <Plus />
-            New Client
+            New Customer
           </Button>
         }
       />
 
       <div className="mb-6 grid grid-cols-1 gap-4 sm:grid-cols-3">
-        <StatCard label="Total Clients" value={String(clients.length)} icon={Users} />
+        <StatCard label="Total Clients" value={String(customers.length)} icon={Users} />
         <StatCard label="Active Clients" value={String(activeCount)} icon={Car} />
         <StatCard label="Lifetime Revenue" value={formatCurrency(totalRevenue)} icon={Wrench} />
       </div>
 
       <Toolbar>
-        <SearchInput value={search} onChange={setSearch} placeholder="Search clients..." />
+        <SearchInput value={search} onChange={setSearch} placeholder="Search customers..." />
         <Select
           value={status}
           onChange={(e) => setStatus(e.target.value)}
@@ -232,12 +236,12 @@ export function ClientsView() {
         empty={
           <EmptyState
             icon={Users}
-            title="No clients found"
+            title="No customers found"
             description="Try adjusting your search or add a new client."
             action={
               <Button onClick={openAdd}>
                 <Plus />
-                New Client
+                New Customer
               </Button>
             }
           />
@@ -247,7 +251,7 @@ export function ClientsView() {
       <Modal
         open={formOpen}
         onClose={() => setFormOpen(false)}
-        title={editing ? 'Edit Client' : 'New Client'}
+        title={editing ? 'Edit Customer' : 'New Customer'}
         description={editing ? 'Update client information.' : 'Add a new client to your database.'}
         footer={
           <>
@@ -255,7 +259,7 @@ export function ClientsView() {
               Cancel
             </Button>
             <Button type="submit" form="client-form">
-              {editing ? 'Save Changes' : 'Create Client'}
+              {editing ? 'Save Changes' : 'Create Customer'}
             </Button>
           </>
         }
@@ -270,21 +274,21 @@ export function ClientsView() {
                 onChange={(e) => setForm({ ...form, firstName: e.target.value })}
               />
             </Field>
-            <Field label="Last name" htmlFor="lastName">
+            <Field label="Last name" htmlFor="name">
               <Input
-                id="lastName"
+                id="name"
                 required
-                value={form.lastName}
-                onChange={(e) => setForm({ ...form, lastName: e.target.value })}
+                value={form.name}
+                onChange={(e) => setForm({ ...form, name: e.target.value })}
               />
             </Field>
           </div>
-          <Field label="Phone" htmlFor="phone">
+          <Field label="Phone" htmlFor="phoneNumber">
             <Input
-              id="phone"
+              id="phoneNumber"
               required
-              value={form.phone}
-              onChange={(e) => setForm({ ...form, phone: e.target.value })}
+              value={form.phoneNumber}
+              onChange={(e) => setForm({ ...form, phoneNumber: e.target.value })}
             />
           </Field>
           <Field label="Email" htmlFor="email">
@@ -319,7 +323,7 @@ export function ClientsView() {
       <Modal
         open={viewing !== null}
         onClose={() => setViewing(null)}
-        title={viewing ? `${viewing.firstName} ${viewing.lastName}` : ''}
+        title={viewing ? `${viewing.firstName} ${viewing.name}` : ''}
         description={viewing?.id}
         footer={
           <Button
@@ -329,23 +333,23 @@ export function ClientsView() {
             }}
           >
             <Pencil />
-            Edit Client
+            Edit Customer
           </Button>
         }
       >
         {viewing && (
           <div className="flex flex-col gap-5">
             <div className="flex items-center gap-4">
-              <Avatar name={`${viewing.firstName} ${viewing.lastName}`} size="lg" />
+              <Avatar name={`${viewing.firstName} ${viewing.name}`} size="lg" />
               <div className="flex flex-col gap-1">
                 <StatusBadge status={viewing.status} />
                 <span className="text-xs text-muted-foreground">
-                  Client since {formatDate(viewing.registeredAt)}
+                  Customer since {formatDate(viewing.registeredAt)}
                 </span>
               </div>
             </div>
             <dl className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-              <DetailRow icon={<Phone className="size-4" />} label="Phone" value={viewing.phone} />
+              <DetailRow icon={<Phone className="size-4" />} label="Phone" value={viewing.phoneNumber} />
               <DetailRow icon={<Mail className="size-4" />} label="Email" value={viewing.email} />
               <DetailRow
                 icon={<MapPin className="size-4" />}
@@ -367,12 +371,12 @@ export function ClientsView() {
         open={deleting !== null}
         onClose={() => setDeleting(null)}
         onConfirm={() => {
-          if (deleting) setClients((prev) => prev.filter((c) => c.id !== deleting.id))
+          if (deleting) setCustomers((prev) => prev.filter((c) => c.id !== deleting.id))
         }}
         title="Delete client?"
         message={
           deleting
-            ? `This will permanently remove ${deleting.firstName} ${deleting.lastName} and cannot be undone.`
+            ? `This will permanently remove ${deleting.firstName} ${deleting.name} and cannot be undone.`
             : ''
         }
         confirmLabel="Delete"

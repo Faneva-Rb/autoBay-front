@@ -1,10 +1,10 @@
 export type ClientStatus = 'Active' | 'Inactive'
 
-export interface Client {
+export interface Customer {
   id: string
+  name: string
   firstName: string
-  lastName: string
-  phone: string
+  phoneNumber: string
   email: string
   address: string
   vehicleCount: number
@@ -12,6 +12,12 @@ export interface Client {
   totalSpent: number
   registeredAt: string
   status: ClientStatus
+}
+
+export interface ApiResponse<T> {
+  status: number;
+  success: boolean;
+  data: T;
 }
 
 export type FuelType = 'Gasoline' | 'Diesel' | 'Hybrid' | 'Electric'
